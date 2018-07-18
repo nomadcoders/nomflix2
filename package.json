@@ -1,0 +1,16 @@
+{
+  "name": "nomflix",
+  "version": "1.0.0",
+  "description": "Cloning Netlifx",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "build": "webpack"
+  },
+  "author": "Me",
+  "license": "ISC",
+  "dependencies": {
+    "webpack": "^4.16.1",
+    "webpack-cli": "^3.0.8"
+  }
+}
