@@ -1,1 +1,0 @@
-{"version":3,"sources":["index.js"],"names":["document","querySelector","innerHTML"],"mappings":";AAAAA,SAASC,cAAc,QAAQC,UAAU","file":"src.b72e2df3.map","sourceRoot":"../src","sourcesContent":["document.querySelector(\"body\").innerHTML(\"I love Parcel I hate Webpack\");\n"]}
