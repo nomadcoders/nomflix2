@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "parcel src/index.html",
-    "prebuild": "rm -rf dist",
-    "build": "parcel build src/index.html --public-url https://nomadcoders.github.io/nomflix2/",
+    "prebuild": "rm -rf ../server/public",
+    "build": "parcel build src/index.html -d ../server/public",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
