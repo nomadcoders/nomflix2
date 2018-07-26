@@ -1,7 +1,20 @@
-const socket = io("https://warm-bullfrog-32.localtunnel.me"),
-  form = document.querySelector("form"),
-  input = form.querySelector("input"),
+const socket = io("/"),
+  messageForm = document.querySelector(".js-messageForm"),
+  messageInput = messageForm.querySelector("input"),
+  nicknameForm = document.querySelector(".js-nicknameForm"),
+  nicknameInput = nicknameForm.querySelector("input"),
   messages = document.querySelector("ul");
+
+messages.scrollTop = messages.scrollHeight;
+
+const NICKNAME = "nickName";
+let nickName = localStorage.getItem(NICKNAME);
+
+if (nickName) {
+  messageForm.style.display = "block";
+} else {
+  nicknameForm.style.display = "block";
+}
 
 const addMessage = (text, mine) => {
   const message = document.createElement("li");
@@ -10,19 +23,48 @@ const addMessage = (text, mine) => {
   messages.appendChild(message);
 };
 
+const getHistory = () => {
+  fetch("/messages")
+    .then(response => response.json())
+    .then(data => {
+      const { messages } = data;
+      messages.forEach(message =>
+        addMessage(
+          `${message.creator}: ${message.message}`,
+          message.creator === nickName
+        )
+      );
+    });
+};
+
 const handleSubmit = event => {
   event.preventDefault();
-  const message = input.value;
+  const message = messageInput.value;
   socket.emit("new message sent", {
-    message
+    message,
+    creator: nickName
   });
-  input.value = "";
-  addMessage(message, true);
+  messageInput.value = "";
+  addMessage(`${nickName}: ${message}`, true);
+  messages.scrollTop = messages.scrollHeight;
+};
+
+const handleNicknameSubmit = event => {
+  event.preventDefault();
+  const nickNameFromInput = nicknameInput.value;
+  localStorage.setItem(NICKNAME, nickNameFromInput);
+  nickName = nickNameFromInput;
+  nicknameInput.value = "";
+  nicknameForm.style.display = "none";
+  messageForm.style.display = "block";
 };
 
 socket.on("notification", data => {
-  const { message } = data;
-  addMessage(message, false);
+  const { message, creator } = data;
+  addMessage(`${creator}: ${message}`, false);
+  messages.scrollTop = messages.scrollHeight;
 });
 
-form.addEventListener("submit", handleSubmit);
+getHistory();
+messageForm.addEventListener("submit", handleSubmit);
+nicknameForm.addEventListener("submit", handleNicknameSubmit);
